@@ -11,13 +11,19 @@ fn main() {
 
     // maybe try implementing using BufReader so that all the file
     // does not get loaded into memory at once
-    let content = std::fs::read_to_string(&args.path).expect("could not read file");
+    let result = std::fs::read_to_string(&args.path); // .expect("could not read file");
 
-    for line in content.lines() {
-        if line.contains(&args.pattern) {
-            println!("{}", line);
+    match result {
+        Ok(content) => {
+            for line in content.lines() {
+                if line.contains(&args.pattern) {
+                    println!("{}", line);
+                }
+            }
+            println!("pattern: {:?}, path: {:?}", args.pattern, args.path);
+        }
+        Err(error) => {
+            println!("Oh noes!: {}", error);
         }
     }
-
-    println!("pattern: {:?}, path: {:?}", args.pattern, args.path)
 }
